@@ -1,0 +1,462 @@
+Telecom Service & Network Management System
+
+A production-oriented FastAPI backend for managing telecom customers,
+service plans, SIM cards, devices, subscriptions, network
+infrastructure, outages, support tickets, SLA tracking, notifications,
+reports, audit logs, security, and performance.
+
+Project Status
+
+FastAPI backend: Levels 1--20 completed
+
+Automated test suite: 351 passed, 115 warnings
+
+Git repository: GitHub master branch
+
+API documentation: Swagger UI / ReDoc
+
+Database: SQLite by default, with SQLAlchemy ORM support for other
+relational databases
+
+Authentication: JWT-based access and refresh tokens
+
+Authorization: Role-based access control
+
+Key Features
+
+JWT authentication and refresh tokens
+
+Role-based authorization
+
+Customer and KYC management
+
+Customer address management
+
+Service plan management
+
+SIM card registration and lifecycle management
+
+Device registration and lifecycle management
+
+Subscription activation and management
+
+Usage tracking for data, voice, and SMS
+
+Network tower management
+
+Network equipment management
+
+Network outage management and affected-customer identification
+
+Support ticket management
+
+Ticket assignment to support agents / field technicians
+
+SLA policies and SLA tracking
+
+Service request management
+
+In-app notification management
+
+Operations dashboard
+
+Advanced reports
+
+Audit logging
+
+CORS configuration
+
+Security headers
+
+Request IDs
+
+In-memory rate limiting
+
+Database performance indexes
+
+Health and readiness endpoints
+
+Unit and integration tests
+
+Technology Stack
+
+Python 3.11+
+
+FastAPI
+
+Pydantic / Pydantic Settings
+
+SQLAlchemy ORM
+
+SQLite by default
+
+PostgreSQL-compatible database configuration
+
+JWT
+
+pwdlib password hashing
+
+Uvicorn
+
+Pytest
+
+HTTPX
+
+Architecture
+
+The project follows a layered backend architecture:
+
+app/
+├── api/             # FastAPI route modules
+├── core/            # Configuration and security
+├── db/              # Database setup and performance indexes
+├── middleware/      # Audit and security middleware
+├── models/          # SQLAlchemy ORM models
+├── repositories/    # Database access layer
+├── schemas/         # Pydantic request/response schemas
+├── services/        # Business logic
+├── utils/           # Dependencies and helper utilities
+├── workers/         # Background-worker package
+└── main.py          # FastAPI application entry point
+
+tests/
+├── unit/
+├── conftest.py
+├── test_dashboard.py
+├── test_reports.py
+├── test_audit_logs.py
+└── test_security_performance.py
+
+Database Schema
+
+The main database entities are:
+
+Users
+
+Customers
+
+Customer Addresses
+
+Service Plans
+
+SIM Cards
+
+Devices
+
+Subscriptions
+
+Usage Records
+
+Network Towers
+
+Network Equipment
+
+Network Outages
+
+Outage Affected Customers
+
+Support Tickets
+
+Ticket Assignments
+
+Field Technicians
+
+SLA Policies
+
+SLA Tracking
+
+Service Requests
+
+Notifications
+
+Audit Logs
+
+See the project ER diagram:
+
+docs/telecom_database_er_diagram.png
+
+Main Relationships
+
+User
+ ├── Customer
+ ├── Field Technician
+ ├── Ticket Assignments
+ ├── Notifications
+ ├── Audit Logs
+ └── Network Outage creator
+
+Customer
+ ├── Addresses
+ ├── SIM Cards
+ ├── Devices
+ ├── Subscriptions
+ ├── Usage Records
+ ├── Service Requests
+ ├── Support Tickets
+ └── Outage Affected Customers
+
+Service Plan
+ ├── SIM Cards
+ └── Subscriptions
+
+Subscription
+ ├── Usage Records
+ └── Service Requests
+
+Network Tower
+ ├── Network Equipment
+ └── Network Outages
+
+Network Outage
+ ├── Affected Customers
+ └── Support Tickets
+
+Support Ticket
+ ├── Ticket Assignments
+ └── SLA Tracking
+
+SLA Policy
+ └── SLA Tracking
+
+Environment Configuration
+
+Copy the example environment file:
+
+copy .env.example .env
+
+Update the values in .env.
+
+Example:
+
+APP_NAME=Telecom Service & Network Management System
+APP_VERSION=1.0.0
+DEBUG=True
+
+DATABASE_URL=sqlite:///./telecom.db
+
+JWT_SECRET_KEY=CHANGE_THIS_TO_A_LONG_RANDOM_SECRET
+JWT_ALGORITHM=HS256
+
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+PASSWORD_RESET_TOKEN_EXPIRE_MINUTES=15
+
+Do not commit .env or real secrets to Git.
+
+Installation
+
+Create and activate a virtual environment.
+
+Windows PowerShell
+
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+Install the required packages:
+
+pip install fastapi uvicorn sqlalchemy pydantic-settings PyJWT pwdlib pytest httpx
+
+For PostgreSQL, install a PostgreSQL driver as required by the selected
+database configuration.
+
+Run the Application
+
+From the project root:
+
+uvicorn app.main:app --reload
+
+The application will normally be available at:
+
+http://127.0.0.1:8000
+
+API Documentation
+
+Swagger UI
+
+http://127.0.0.1:8000/docs
+
+ReDoc
+
+http://127.0.0.1:8000/redoc
+
+Swagger provides interactive documentation for the implemented API
+endpoints.
+
+System Endpoints
+
+Root
+
+GET /
+
+Health
+
+GET /health
+
+Readiness
+
+GET /ready
+
+The readiness endpoint checks database availability.
+
+Testing
+
+Run the complete test suite:
+
+pytest -q
+
+The completed Levels 1--20 test suite currently reports:
+
+351 passed, 115 warnings
+
+The warnings are non-blocking deprecation/runtime warnings observed
+during the test run.
+
+Security
+
+The application includes:
+
+JWT authentication
+
+Access and refresh token handling
+
+Password hashing
+
+Role-based authorization
+
+Request validation
+
+CORS configuration
+
+Security response headers
+
+Content Security Policy
+
+Request IDs
+
+Rate limiting
+
+Authentication endpoint rate limiting
+
+Audit logging for state-changing requests
+
+Protection against logging sensitive authentication data
+
+Production deployments should use a strong random JWT secret and HTTPS.
+
+Performance
+
+Performance-related features include:
+
+Indexed foreign-key and frequently queried fields
+
+Composite indexes for audit logs
+
+Composite indexes for usage queries
+
+Composite indexes for outage queries
+
+Composite indexes for support ticket queries
+
+Composite indexes for ticket assignment queries
+
+Database readiness checks
+
+API Modules
+
+The FastAPI application exposes modules for:
+
+/auth
+/customers
+/service-plans
+/sim-cards
+/devices
+/subscriptions
+/usage
+/network-towers
+/network-equipment
+/network-outages
+/field-technicians
+/support-tickets
+/ticket-assignments
+/sla
+/service-requests
+/notifications
+/dashboard
+/reports
+/audit-logs
+/health
+/ready
+
+Exact endpoint paths and request/response schemas are available in
+Swagger.
+
+End-to-End Business Flow
+
+The intended demonstration flow is:
+
+Admin Login
+    ↓
+Create Customer
+    ↓
+Create Service Plan
+    ↓
+Register SIM
+    ↓
+Register Device
+    ↓
+Activate Subscription
+    ↓
+Generate Usage
+    ↓
+Register Network Tower
+    ↓
+Create Network Outage
+    ↓
+Identify Affected Customers
+    ↓
+Create Support Ticket
+    ↓
+Assign Agent / Technician
+    ↓
+Track SLA
+    ↓
+Resolve Ticket
+    ↓
+Restore Network
+    ↓
+Verify Notifications
+    ↓
+View Operations Dashboard
+    ↓
+Run Reports
+    ↓
+Review Audit Logs
+
+Git Repository
+
+GitHub repository:
+
+https://github.com/ANNAREDDY123/telecom-service-network-management
+
+The project is maintained on the master branch.
+
+Submission Deliverables
+
+Deliverable                    Status
+
+Complete FastAPI source code   Completed
+Database schema / ER diagram   Completed
+Alembic migrations             Pending
+Swagger documentation          Implemented; final screenshots pending
+Postman collection             Pending
+Unit & integration tests       Completed
+Docker configuration           Pending
+.env.example                 Completed
+README                         Completed
+Git repository                 Completed
+API screenshots                Pending
+End-to-end demo                Pending final execution
+
+License
+
+This project is intended as an academic / portfolio backend project.
